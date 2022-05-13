@@ -1,5 +1,16 @@
 #menu {
     list-style-type:none;
+    background-color: aquamarine;
     margin:0;
     padding: 0;
+}
+
+
+#info{
+    float: left;
+}
+
+#campos{
+    float: right;
+    display: block;
 }
