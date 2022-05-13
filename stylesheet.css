@@ -6,11 +6,13 @@
 }
 
 
-#info{
-    float: left;
-}
 
 #campos{
-    float: right;
-    display: block;
+    float: left;
 }
+#info{
+    float:right;
+    border-color: blue 2px;
+}
+
+
