@@ -1,49 +1,149 @@
-html{
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+/* Encabezado */
+header {
+    background-color: #0066cc;
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-family: 'Macondo', cursive;
+    font-size: 2.5rem;
+}
+
+/* Menú de navegación */
+#menu {
+    list-style-type: none;
+    background-color: #333;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#menu li {
+    margin: 0 1rem;
+}
+
+#menu a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#menu a:hover {
+    background-color: #0066cc;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Imagen del banner */
+.banner-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+/* Texto introductorio */
+.intro-text {
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 2rem 0;
+    color: #333;
+}
+
+/* Barra lateral */
+#info {
+    background-color: #0066cc;
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+/* Artículos */
+.post {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.post h2 {
+    color: #0066cc;
+    margin-bottom: 1rem;
     font-family: 'Macondo', cursive;
 }
 
-header{
-    background-color: rgb(0, 140, 255);
-    height: 100px;
-    text-align: center;    
+.post img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin: 1rem 0;
 }
 
-#menu {
-    list-style-type:none;
-    background-color: #666;
-    margin:0;
-    padding:0;
+.post p {
+    color: #666;
 }
 
-.container{
-    margin: 0 auto;
+/* Pie de página */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 2rem;
 }
 
-.post{
-    background-color: azure; 
-    /*float:left;*/
-    margin: 100px;
-
-    /*display: block;*/
-}
-
-
-
-#info{
-    padding: 3%;
-    float:right;
-    background-color:cadetblue;
-    width: 15%;
-    height: 300px
-}
-@media (max-width: 600px) {
-    nav, article {
-      width: 100%;
-      height: auto;
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
     }
-}
 
-footer{
-    background-color: #666;
-    height: 100px
+    #menu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #menu li {
+        margin: 0.5rem 0;
+    }
+
+    #info {
+        width: 100%;
+        float: none;
+        margin-bottom: 2rem;
+    }
+
+    .post {
+        margin: 1rem 0;
+    }
 }
