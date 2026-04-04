@@ -1,0 +1,65 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '../components/blog/TableOfContents.vue';
+import ReadingProgress from '../components/blog/ReadingProgress.vue';
+import { formatDate } from '../utils/formatDate';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { entry, headings } = Astro.props;
+const { title, description, category, pubDate } = entry.data;
+
+const categoryLabels: Record<string, string> = {
+  'termodinamica': 'Termodinámica',
+  'mecanica-cuantica': 'Mecánica Cuántica',
+  'fisica-clasica': 'Física Clásica',
+  'electromagnetismo': 'Electromagnetismo',
+  'relatividad': 'Relatividad',
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <ReadingProgress client:load />
+
+  <div class="max-w-6xl mx-auto px-4 pt-32 pb-24">
+    <div class="lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
+      <!-- Article content -->
+      <article>
+        <!-- Header -->
+        <header class="mb-12">
+          <p class="font-space text-tertiary text-sm uppercase tracking-widest mb-4">
+            {categoryLabels[category]}
+          </p>
+          <h1 class="font-space font-bold text-4xl md:text-5xl text-text-primary leading-tight mb-4">
+            {title}
+          </h1>
+          <p class="font-body text-text-secondary text-lg mb-6">{description}</p>
+          <time class="font-body text-text-muted text-sm">
+            {formatDate(pubDate)}
+          </time>
+        </header>
+
+        <!-- MDX content -->
+        <div class="prose prose-invert prose-lg max-w-none
+          prose-headings:font-space prose-headings:font-semibold prose-headings:text-text-primary
+          prose-p:font-body prose-p:text-text-secondary prose-p:leading-relaxed
+          prose-a:text-primary prose-a:no-underline hover:prose-a:text-primary-light
+          prose-code:text-primary-light prose-code:bg-surface prose-code:px-1 prose-code:rounded
+          prose-pre:bg-surface prose-pre:border prose-pre:border-primary/15
+          prose-strong:text-text-primary
+          prose-blockquote:border-primary/40 prose-blockquote:text-text-secondary">
+          <slot />
+        </div>
+      </article>
+
+      <!-- Sticky ToC -->
+      <aside>
+        <TableOfContents client:load headings={headings} />
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
