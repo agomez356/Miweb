@@ -1,0 +1,53 @@
+---
+import '../assets/styles/global.css';
+import Header from '../components/common/Header.vue';
+import Footer from '../components/common/Footer.vue';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description = 'Blog educativo de física moderna', ogImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title} | FísicaFans</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- KaTeX CSS — must be in <head>, NOT in global.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+      integrity="sha384-n8MVd4RsNIU0tAv4RtvSljdZF8WRiHE+c9Y/fvJr/GVGnGQFYwJJ7cWz0sHqerS"
+      crossorigin="anonymous"
+    />
+
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:title" content={`${title} | FísicaFans`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <Header client:load />
+    <main>
+      <slot />
+    </main>
+    <Footer client:load />
+  </body>
+</html>
