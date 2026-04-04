@@ -52,7 +52,7 @@ const categoryLabels: Record<PhysicsCategory, string> = {
       </h3>
     </a>
 
-    <p class="font-body text-text-secondary text-sm leading-relaxed mb-4">
+    <p class="font-body text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">
       {{ description }}
     </p>
 

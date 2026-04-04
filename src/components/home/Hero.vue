@@ -154,7 +154,7 @@ onUnmounted(() => {
 
       <h1 class="font-space font-bold text-5xl md:text-7xl leading-tight mb-6">
         <span
-          class="bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent"
+          class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
         >
           Explorá el Universo
         </span>
@@ -170,7 +170,7 @@ onUnmounted(() => {
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
           :href="`${base}/blog/`"
-          class="px-8 py-4 bg-gradient-to-r from-primary to-primary-light text-space-bg font-space font-semibold rounded-celestial-xl hover:opacity-90 transition-opacity"
+          class="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-space-bg font-space font-semibold rounded-celestial-xl hover:opacity-90 transition-opacity"
         >
           Leer el Blog
         </a>
