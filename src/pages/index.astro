@@ -1,9 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.vue';
+import PhysicsCategories from '../components/home/PhysicsCategories.vue';
 ---
 
-<BaseLayout title="Inicio">
-  <div class="min-h-screen flex items-center justify-center">
-    <p class="text-text-secondary font-body">FísicaFans — Próximamente</p>
-  </div>
+<BaseLayout
+  title="Inicio"
+  description="Blog educativo de física moderna. Mecánica cuántica, relatividad, termodinámica y más con visualizaciones interactivas."
+>
+  <Hero client:visible />
+  <PhysicsCategories client:visible />
 </BaseLayout>
