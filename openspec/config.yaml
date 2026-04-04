@@ -1,0 +1,80 @@
+# openspec/config.yaml
+schema: spec-driven
+
+context: |
+  Tech stack: Static HTML/CSS → migrating to Astro 4.x + Vue 3 + TailwindCSS 3.x
+  Architecture: SSG with Astro Islands; Vue components for interactivity; MDX for content
+  Design system: "The Celestial Archive" — dark space theme, glassmorphism, CSS animations
+  Content: FísicaFans physics blog (Termodinámica, Mecánica Cuántica, Física Clásica, Electromagnetismo, Relatividad)
+  Math: KaTeX for equation rendering
+  Visualizations: Canvas API + Chart.js (5 interactive Vue physics components)
+  Deployment: Vercel (primary) or GitHub Pages
+  Owner: agomez356
+  Repo: github.com/agomez356/Miweb
+
+strict_tdd: false
+# NOTE: Strict TDD Mode is ENABLED globally (gentle-ai config) but cannot activate yet —
+# no test runner exists (pre-migration, static HTML/CSS). Re-run sdd-init after Astro
+# migration is complete and Vitest/Playwright is installed to activate TDD.
+
+testing:
+  strict_tdd: false
+  reason: "No test runner detected — project is pre-migration (pure HTML/CSS). Post-migration target: Vitest (unit) + Playwright (E2E)."
+  detected: "2026-04-04"
+  test_runner:
+    framework: none
+    command: null
+  layers:
+    unit:
+      available: false
+      tool: null
+    integration:
+      available: false
+      tool: null
+    e2e:
+      available: false
+      tool: null
+  coverage:
+    available: false
+    command: null
+  quality_tools:
+    linter:
+      available: false
+      command: null
+    type_checker:
+      available: false
+      command: null
+    formatter:
+      available: false
+      command: null
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes (original HTML/CSS always in old_version/)
+    - Identify which migration phase is affected (1-10)
+    - Note impact on Lighthouse performance targets (95+ all metrics)
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Reference physics accuracy requirements for content changes
+  design:
+    - Include sequence diagrams for complex interactive component flows
+    - Document architecture decisions with rationale
+    - Specify Astro Island hydration strategy (client:load, client:visible, client:idle)
+  tasks:
+    - Group tasks by migration phase (infrastructure, implementation, testing, content)
+    - Use hierarchical numbering (1.1, 1.2, etc.)
+    - Keep tasks small enough to complete in one session
+  apply:
+    - Follow existing code patterns and the Celestial Archive design system
+    - Load relevant coding skills for Astro/Vue/TailwindCSS stack
+    - Lazy load Canvas visualizations (only render when in viewport)
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "npm run build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas (large removals)
+    - Ensure old_version/ backup remains intact
