@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://agomez356.github.io/Miweb/sitemap-index.xml

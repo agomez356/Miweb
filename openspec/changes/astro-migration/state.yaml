@@ -1,6 +1,7 @@
 change: astro-migration
-status: proposed
+status: implemented
 artifact_store: openspec
-phases_completed: [explore, proposal, spec, design, tasks]
-phases_pending: [apply, verify, archive]
+phases_completed: [explore, proposal, spec, design, tasks, apply]
+phases_pending: [verify, archive]
 created: 2026-04-04
+implemented: 2026-04-04
