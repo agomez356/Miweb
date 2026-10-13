@@ -20,7 +20,12 @@ pnpm preview
 pnpm format     # prettier
 ```
 
-`pnpm build` escribe en `dist/` con las rutas bajo `/Miweb`. El workflow `.github/workflows/deploy.yml` instala con `pnpm install --frozen-lockfile` y despliega `dist/` a GitHub Pages en cada push a `main`.
+`pnpm build` escribe en `dist/` con las rutas bajo `/Miweb`.
+
+Automatizaciones en GitHub Actions, ambas con Node 20, pnpm 10 y `pnpm install --frozen-lockfile`:
+
+- `.github/workflows/ci.yml` corre `pnpm build` en cada pull request.
+- `.github/workflows/deploy.yml` despliega `dist/` a GitHub Pages en cada push a `main`.
 
 ## Mapa del código
 
