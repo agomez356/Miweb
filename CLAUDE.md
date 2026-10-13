@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+> Este archivo describe el sitio estático previo a la migración y varias decisiones que ya no aplican. La guía vigente para agentes es [`AGENTS.md`](AGENTS.md).
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Repository Overview
