@@ -1,8 +1,8 @@
 # AGENTS.md
 
-Instrucciones para agentes de código que trabajan en **FísicaFans** (`agomez356/Miweb`).
+Instrucciones oficiales para agentes de código que trabajan en **FísicaFans** (`agomez356/Miweb`). Este archivo es la única guía de agentes del repositorio.
 
-Si este archivo contradice a `CLAUDE.md` o a `PLAN_MIGRACION_ASTRO.md`, manda este archivo y el código en `src/`. Esos documentos describen el sitio HTML anterior y decisiones que ya no aplican (npm, Vercel, Chart.js, MathJax, modo claro, Docker).
+Si este archivo contradice a `PLAN_MIGRACION_ASTRO.md`, manda este archivo y el código en `src/`. Ese plan describe el sitio HTML anterior y decisiones que ya no aplican (npm, Vercel, Chart.js, MathJax, modo claro, Docker).
 
 ## Qué es este repositorio
 
@@ -174,4 +174,4 @@ Mensajes en formato convencional (`feat:`, `fix:`, `chore:`, `docs:`). El histor
 - Este archivo y `src/`: fuente de verdad.
 - `openspec/changes/astro-migration/`: spec archivada del MVP (`proposal.md`, `design.md`, `tasks.md`). Sirve para entender decisiones. No reabras esas tareas.
 - `.claude/skills/`: guías de SEO en Astro, WebP, LaTeX/KaTeX, validación de física, breakpoints y composables Vue. Léelas cuando el cambio caiga en ese tema.
-- `CLAUDE.md` y `PLAN_MIGRACION_ASTRO.md`: plan histórico. Están desactualizados respecto al código.
+- `PLAN_MIGRACION_ASTRO.md`: plan histórico. Está desactualizado respecto al código.

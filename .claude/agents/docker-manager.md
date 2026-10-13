@@ -225,7 +225,7 @@ old_version/
 # Documentation (optional, include if needed in prod)
 README.md
 PLAN_MIGRACION_ASTRO.md
-CLAUDE.md
+AGENTS.md
 ```
 
 ## Common Docker Commands

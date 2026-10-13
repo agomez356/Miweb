@@ -52,17 +52,17 @@ Source: sdd-init scan
 
 | File | Path |
 |------|------|
-| Agent instructions (project) | CLAUDE.md |
+| Agent instructions (project) | AGENTS.md |
 
-**Key conventions from CLAUDE.md:**
+**Key conventions from AGENTS.md:**
 - Stack: Astro 4.x + Vue 3 (Composition API) + TailwindCSS 3.x
 - Content: MDX blog posts, 5 physics categories
 - Math: KaTeX only (not MathJax)
 - Design: "The Celestial Archive" dark space theme with glassmorphism
 - Images: WebP format, lazy-load Canvas in viewport only
 - Performance targets: Lighthouse 95+, FCP < 1s, bundle < 200KB initial
-- Deployment: Vercel (primary), GitHub Pages (alternative)
-- Git: feature/astro-migration branch, conventional commits
+- Deployment: GitHub Pages only (`base: /Miweb`), package manager pnpm
+- Git: conventional commits (`feat:`, `fix:`, `chore:`, `docs:`)
 
 ---
 
@@ -98,7 +98,7 @@ Source: sdd-init scan
 
 ### tailwind-4 (Miweb-specific note)
 - TailwindCSS 3.x is the target version for this project (not v4)
-- Space theme CSS variables defined in CLAUDE.md — use those as semantic tokens
+- Space theme tokens are defined in AGENTS.md and `tailwind.config.cjs` — use those as semantic tokens
 
 ### vue-composable-generator
 - `use` prefix required for all composables (e.g., `useCanvas`, `useWaveSimulator`)
