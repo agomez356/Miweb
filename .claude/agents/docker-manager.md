@@ -224,7 +224,6 @@ old_version/
 
 # Documentation (optional, include if needed in prod)
 README.md
-PLAN_MIGRACION_ASTRO.md
 AGENTS.md
 ```
 
