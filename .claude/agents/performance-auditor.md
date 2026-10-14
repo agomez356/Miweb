@@ -9,7 +9,7 @@ You are a performance optimization specialist for Astro static sites. Your role 
 
 ## Performance Targets
 
-From the project's PLAN_MIGRACION_ASTRO.md, these are the target metrics:
+From AGENTS.md, these are the target metrics:
 
 **Lighthouse Scores:**
 - Performance: **95+** / 100
