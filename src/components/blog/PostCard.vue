@@ -10,8 +10,15 @@ interface Props {
   slug: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 const base = import.meta.env.BASE_URL;
+
+function isoDate(date: Date): string {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
 const categoryColors: Record<PhysicsCategory, string> = {
   'termodinamica': '#ec4899',
@@ -31,7 +38,7 @@ const categoryLabels: Record<PhysicsCategory, string> = {
 </script>
 
 <template>
-  <article class="glass rounded-celestial-lg p-6 group hover:-translate-y-1 transition-all duration-300">
+  <article class="glass relative rounded-celestial-lg p-6 group hover:-translate-y-1 transition-all duration-300">
     <div class="flex items-center gap-3 mb-4">
       <span
         class="font-space text-xs px-3 py-1 rounded-full"
@@ -43,27 +50,27 @@ const categoryLabels: Record<PhysicsCategory, string> = {
       >
         {{ categoryLabels[category] }}
       </span>
-      <time class="font-body text-xs text-text-muted">{{ formatDate(pubDate) }}</time>
+      <time class="font-body text-xs text-text-muted" :datetime="isoDate(pubDate)">{{ formatDate(pubDate) }}</time>
     </div>
 
-    <a :href="`${base}/blog/${slug}/`">
-      <h3 class="font-space font-semibold text-lg text-text-primary mb-2 group-hover:text-primary-light transition-colors">
+    <h3 class="font-space font-semibold text-lg text-text-primary mb-2 group-hover:text-primary-light transition-colors">
+      <a
+        :href="`${base}/blog/${slug}/`"
+        class="after:absolute after:inset-0 after:z-10 after:content-[''] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary rounded-sm"
+      >
         {{ title }}
-      </h3>
-    </a>
+      </a>
+    </h3>
 
     <p class="font-body text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">
       {{ description }}
     </p>
 
-    <a
-      :href="`${base}/blog/${slug}/`"
-      class="font-space text-sm text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
-    >
+    <span class="font-space text-sm text-primary group-hover:text-primary-light transition-colors inline-flex items-center gap-1">
       Leer más
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
-    </a>
+    </span>
   </article>
 </template>
