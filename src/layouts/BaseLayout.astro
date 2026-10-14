@@ -2,14 +2,22 @@
 import '../assets/styles/global.css';
 import Header from '../components/common/Header.vue';
 import Footer from '../components/common/Footer.vue';
+import { withBase } from '../utils/url';
 
 interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /** Path used to mark the current section. The 404 page passes "" so no link is current. */
+  currentPath?: string;
 }
 
-const { title, description = 'Blog educativo de física moderna', ogImage } = Astro.props;
+const {
+  title,
+  description = 'Blog educativo de física moderna',
+  ogImage,
+  currentPath = Astro.url.pathname,
+} = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -18,6 +26,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href={withBase('favicon.ico')} sizes="any" />
+    <link rel="apple-touch-icon" href={withBase('apple-touch-icon.png')} sizes="180x180" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <title>{title} — FísicaFans</title>
@@ -44,10 +54,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
   </head>
   <body>
-    <Header client:load />
+    <Header client:load currentPath={currentPath} />
     <main>
       <slot />
     </main>
-    <Footer client:load />
+    <Footer client:load currentPath={currentPath} />
   </body>
 </html>
