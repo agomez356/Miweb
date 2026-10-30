@@ -7,6 +7,13 @@ export type PhysicsCategory =
   | 'electromagnetismo'
   | 'relatividad';
 
+export type ReadingLevel = 'introduccion' | 'intermedio';
+
+export const readingLevelLabels: Record<ReadingLevel, string> = {
+  introduccion: 'Introducción',
+  intermedio: 'Intermedio',
+};
+
 // ─── Content Collections ───────────────────────────────────────────────────
 
 /**
@@ -17,6 +24,7 @@ export interface PostFrontmatter {
   title: string;
   description: string;
   category: PhysicsCategory;
+  level: ReadingLevel;
   pubDate: Date;
   draft: boolean;
   heroImage?: string;

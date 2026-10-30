@@ -1,17 +1,28 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils/formatDate';
-import type { PhysicsCategory } from '@/types/index';
+import { formatReadingTime } from '@/utils/readingTime';
+import { readingLevelLabels, type PhysicsCategory, type ReadingLevel } from '@/types/index';
 
 interface Props {
   title: string;
   description: string;
   category: PhysicsCategory;
+  level: ReadingLevel;
   pubDate: Date;
+  readingMinutes: number;
   slug: string;
 }
 
 const props = defineProps<Props>();
 const base = import.meta.env.BASE_URL;
+
+function isoDate(value: unknown): string | undefined {
+  const date = value instanceof Date ? value : new Date(typeof value === 'string' ? value : Number.NaN);
+  if (Number.isNaN(date.valueOf())) return undefined;
+  return date.toISOString().slice(0, 10);
+}
+
+const published = isoDate(props.pubDate);
 
 const categoryColors: Record<PhysicsCategory, string> = {
   'termodinamica': '#ec4899',
@@ -32,18 +43,22 @@ const categoryLabels: Record<PhysicsCategory, string> = {
 
 <template>
   <article class="glass rounded-celestial-lg p-6 group hover:-translate-y-1 transition-all duration-300">
-    <div class="flex items-center gap-3 mb-4">
-      <span
-        class="font-space text-xs px-3 py-1 rounded-full"
-        :style="{
-          backgroundColor: `${categoryColors[category]}20`,
-          color: categoryColors[category],
-          border: `1px solid ${categoryColors[category]}40`,
-        }"
-      >
-        {{ categoryLabels[category] }}
-      </span>
-      <time class="font-body text-xs text-text-muted">{{ formatDate(pubDate) }}</time>
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4">
+      <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span
+          class="font-space text-xs px-3 py-1 rounded-full"
+          :style="{
+            backgroundColor: `${categoryColors[category]}20`,
+            color: categoryColors[category],
+            border: `1px solid ${categoryColors[category]}40`,
+          }"
+        >
+          {{ categoryLabels[category] }}
+        </span>
+        <span class="font-body text-xs text-text-secondary">{{ readingLevelLabels[level] }}</span>
+      </div>
+      <time class="font-body text-xs text-text-muted" :datetime="published">{{ formatDate(pubDate) }}</time>
+      <span class="font-body text-xs text-text-muted">{{ formatReadingTime(readingMinutes) }}</span>
     </div>
 
     <a :href="`${base}/blog/${slug}/`">

@@ -2,7 +2,11 @@
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/blog/TableOfContents.vue';
 import ReadingProgress from '../components/blog/ReadingProgress.vue';
+import { siteAuthor } from '../data/author';
+import { readingLevelLabels } from '../types/index';
 import { formatDate } from '../utils/formatDate';
+import { formatReadingTime, readingTimeMinutes } from '../utils/readingTime';
+import { withBase } from '../utils/withBase';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -11,7 +15,10 @@ interface Props {
 }
 
 const { entry, headings } = Astro.props;
-const { title, description, category, pubDate } = entry.data;
+const { title, description, category, pubDate, level } = entry.data;
+const readingLabel = formatReadingTime(readingTimeMinutes(entry.body));
+const acercaHref = withBase('/acerca/');
+const published = pubDate.toISOString().slice(0, 10);
 
 const categoryLabels: Record<string, string> = {
   'termodinamica': 'Termodinámica',
@@ -31,16 +38,24 @@ const categoryLabels: Record<string, string> = {
       <article>
         <!-- Header -->
         <header class="mb-12">
-          <p class="font-space text-tertiary text-sm uppercase tracking-widest mb-4">
-            {categoryLabels[category]}
+          <p class="font-space text-sm mb-4 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span class="text-tertiary uppercase tracking-widest">{categoryLabels[category]}</span>
+            <span class="text-text-muted" aria-hidden="true">·</span>
+            <span class="font-body text-text-secondary">{readingLevelLabels[level]}</span>
           </p>
           <h1 class="font-space font-bold text-4xl md:text-5xl text-text-primary leading-tight mb-4">
             {title}
           </h1>
-          <p class="font-body text-text-secondary text-lg mb-6">{description}</p>
-          <time class="font-body text-text-muted text-sm">
-            {formatDate(pubDate)}
-          </time>
+          <p class="font-body text-text-muted text-sm mb-6 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <a href={acercaHref} class="inline-flex items-center min-h-11 text-primary hover:text-primary-light transition-colors">
+              {siteAuthor.name}
+            </a>
+            <span aria-hidden="true">·</span>
+            <time datetime={published}>{formatDate(pubDate)}</time>
+            <span aria-hidden="true">·</span>
+            <span>{readingLabel}</span>
+          </p>
+          <p class="font-body text-text-secondary text-lg">{description}</p>
         </header>
 
         <!-- MDX content -->

@@ -12,6 +12,7 @@ const blog = defineCollection({
       'electromagnetismo',
       'relatividad',
     ]),
+    level: z.enum(['introduccion', 'intermedio']),
     pubDate: z.coerce.date(),
     draft: z.boolean().default(false),
     heroImage: z.string().optional(),

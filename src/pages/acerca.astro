@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteAuthor } from '../data/author';
+---
+
+<BaseLayout
+  title="Acerca de"
+  description="Quién escribe FísicaFans, para quién son los artículos y cómo se revisa el contenido antes de publicarlo."
+>
+  <div class="max-w-3xl mx-auto px-4 pt-32 pb-24">
+    <p class="font-space text-tertiary text-sm uppercase tracking-widest mb-3">El sitio</p>
+    <h1 class="font-space font-bold text-4xl md:text-5xl text-text-primary mb-10">Acerca de</h1>
+    <div class="space-y-6 font-body text-text-secondary text-base md:text-lg leading-relaxed">
+      <p>
+        FísicaFans es un blog educativo de física en español. Los artículos los escribe {siteAuthor.name}, que
+        también mantiene el sitio. La firma es la misma en todo el blog: no hay varias cuentas de autor ni un
+        sistema de comentarios.
+      </p>
+      <p>
+        Está pensado para quien quiere seguir una idea con calma, sin dar por sabido un curso universitario
+        completo. Junto a la categoría, cada texto indica si es de introducción o de nivel intermedio. Los
+        minutos de lectura se calculan a partir del cuerpo del artículo.
+      </p>
+      <p>
+        El criterio al publicar es usar unidades del Sistema Internacional y, cuando una constante lleva cifras,
+        un valor aceptado en la literatura (el del NIST, si esa constante está tabulada), con la precisión del
+        propio artículo. Las fórmulas se componen con KaTeX. No hay revisión por pares. Si algo no cuadra, se
+        puede señalar en el
+        <a
+          href="https://github.com/agomez356/Miweb"
+          class="text-primary hover:text-primary-light transition-colors"
+          >repositorio del sitio</a
+        >.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

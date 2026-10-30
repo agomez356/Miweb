@@ -31,19 +31,22 @@ Automatizaciones en GitHub Actions, ambas con Node 20, pnpm 10 y `pnpm install -
 
 ```
 src/pages/index.astro                 Home
+src/pages/acerca.astro                Quién escribe y cómo se revisa el contenido
 src/pages/blog/index.astro            Índice del blog
 src/pages/blog/[...slug].astro        Post (getStaticPaths, excluye draft)
 src/layouts/BaseLayout.astro          HTML, fuentes, KaTeX CSS, SEO básico
-src/layouts/BlogPostLayout.astro      Progreso de lectura, TOC, chip de categoría
+src/layouts/BlogPostLayout.astro      Progreso de lectura, TOC, nivel, autor y minutos
 src/components/common/                Header.vue, Footer.vue
 src/components/home/                  Hero.vue, PhysicsCategories.vue
 src/components/blog/                  PostCard.vue, ReadingProgress.vue, TableOfContents.vue
 src/content/config.ts                 Schema Zod de la colección blog
 src/content/blog/*.mdx                Posts en español
 src/assets/styles/global.css          Fondo, scrollbar y clase .glass
+src/data/author.ts                    Autor único del sitio
 src/utils/cn.ts                       clsx + tailwind-merge
 src/utils/formatDate.ts               Fechas en es-ES
-src/types/index.ts                    PhysicsCategory, PostFrontmatter, partículas
+src/utils/readingTime.ts              Minutos de lectura a partir del cuerpo
+src/types/index.ts                    PhysicsCategory, ReadingLevel, PostFrontmatter, partículas
 public/images/                        Imágenes publicadas
 public/robots.txt
 old_version/                          Copia del sitio HTML original. No editarla.
@@ -121,6 +124,7 @@ Los posts van en `src/content/blog/*.mdx`. El frontmatter tiene que validar este
 title: string
 description: string
 category: termodinamica | mecanica-cuantica | fisica-clasica | electromagnetismo | relatividad
+level: introduccion | intermedio
 pubDate: YYYY-MM-DD
 draft: false
 heroImage: /images/...   # opcional
@@ -131,6 +135,7 @@ heroImage: /images/...   # opcional
 - Matemáticas: `$...$` en línea y `$$...$$` en bloque. Fracciones con `\frac{}{}`. Vectores con `\vec{}` o `\mathbf{}`. Solo el subconjunto que soporta KaTeX.
 - Unidades del SI. Constantes con valores aceptados (NIST cuando aplique). No afirmes un resultado físico que no hayas comprobado.
 - Una categoría nueva exige cambiar a la vez el enum de `src/content/config.ts`, el tipo `PhysicsCategory` y los mapas de color y etiqueta.
+- Un nivel nuevo exige cambiar a la vez el enum de `src/content/config.ts`, el tipo `ReadingLevel` y `readingLevelLabels`. El autor no va en el frontmatter: es el de `src/data/author.ts` y la página `src/pages/acerca.astro`.
 
 ### Imágenes y rendimiento
 
@@ -148,7 +153,7 @@ heroImage: /images/...   # opcional
 El trabajo posterior al MVP no está hecho y no se arranca solo:
 
 - Visualizadores Canvas (`RelativityVisualizer`, `WaveSimulator`, `ElectromagneticField`, `ForceSimulator`, diagramas P-V). Si se construyen, Canvas API puro: Chart.js quedó fuera del alcance.
-- Páginas de categoría y página About.
+- Páginas de categoría. La página del autor ya está en `src/pages/acerca.astro`.
 - README, dominio propio, modo claro, Docker.
 
 Tampoco:
