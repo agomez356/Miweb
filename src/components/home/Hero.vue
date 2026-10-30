@@ -8,6 +8,8 @@ const isVisible = ref(false);
 let animationId = 0;
 let observer: IntersectionObserver | null = null;
 let resizeTimer: ReturnType<typeof setTimeout>;
+let prefersReducedMotion = false;
+let motionQuery: MediaQueryList | null = null;
 
 const config: ParticleConfig = {
   count: 80,
@@ -54,7 +56,11 @@ function resizeCanvas(): void {
   particles = createParticles(rect.width, rect.height);
 }
 
-function draw(): void {
+function shouldAnimate(): boolean {
+  return isVisible.value && !document.hidden && !prefersReducedMotion;
+}
+
+function paint(): void {
   const canvas = canvasRef.value;
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
@@ -67,15 +73,6 @@ function draw(): void {
   ctx.clearRect(0, 0, w, h);
 
   for (const p of particles) {
-    p.x += p.vx;
-    p.y += p.vy;
-
-    // Wrap at edges
-    if (p.x < 0) p.x = w;
-    if (p.x > w) p.x = 0;
-    if (p.y < 0) p.y = h;
-    if (p.y > h) p.y = 0;
-
     ctx.save();
     ctx.globalAlpha = p.opacity;
     ctx.fillStyle = p.color;
@@ -84,10 +81,34 @@ function draw(): void {
     ctx.fill();
     ctx.restore();
   }
+}
 
-  if (isVisible.value) {
-    animationId = requestAnimationFrame(draw);
+function draw(): void {
+  if (!shouldAnimate()) {
+    stopAnimation();
+    return;
   }
+
+  const canvas = canvasRef.value;
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.width / dpr;
+  const h = canvas.height / dpr;
+
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+
+    // Wrap at edges
+    if (p.x < 0) p.x = w;
+    if (p.x > w) p.x = 0;
+    if (p.y < 0) p.y = h;
+    if (p.y > h) p.y = 0;
+  }
+
+  paint();
+  animationId = requestAnimationFrame(draw);
 }
 
 function startAnimation(): void {
@@ -97,27 +118,48 @@ function startAnimation(): void {
 
 function stopAnimation(): void {
   cancelAnimationFrame(animationId);
+  animationId = 0;
+}
+
+function syncAnimation(): void {
+  if (shouldAnimate()) {
+    startAnimation();
+    return;
+  }
+
+  stopAnimation();
+  if (prefersReducedMotion) paint();
 }
 
 function handleResize(): void {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     resizeCanvas();
-    if (isVisible.value) startAnimation();
+    syncAnimation();
   }, 100);
+}
+
+function onMotionChange(event: MediaQueryListEvent): void {
+  prefersReducedMotion = event.matches;
+  syncAnimation();
+}
+
+function onVisibilityChange(): void {
+  syncAnimation();
 }
 
 onMounted(() => {
   resizeCanvas();
 
+  motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  prefersReducedMotion = motionQuery.matches;
+  motionQuery.addEventListener('change', onMotionChange);
+  document.addEventListener('visibilitychange', onVisibilityChange);
+
   observer = new IntersectionObserver(
     (entries) => {
       isVisible.value = entries[0].isIntersecting;
-      if (isVisible.value) {
-        startAnimation();
-      } else {
-        stopAnimation();
-      }
+      syncAnimation();
     },
     { threshold: 0.1 }
   );
@@ -127,12 +169,16 @@ onMounted(() => {
   }
 
   window.addEventListener('resize', handleResize);
+
+  if (prefersReducedMotion) paint();
 });
 
 onUnmounted(() => {
   stopAnimation();
   observer?.disconnect();
   window.removeEventListener('resize', handleResize);
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  motionQuery?.removeEventListener('change', onMotionChange);
   clearTimeout(resizeTimer);
 });
 </script>
@@ -184,7 +230,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 motion-safe:animate-bounce" aria-hidden="true">
       <svg class="w-6 h-6 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
