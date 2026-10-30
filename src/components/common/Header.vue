@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import { cn } from '@/utils/cn';
+import { isCurrentSection, withBase } from '@/utils/url';
 import type { NavLink } from '@/types/index';
 
-const base = import.meta.env.BASE_URL;
+const props = defineProps<{
+  currentPath: string;
+}>();
 
 const navLinks: NavLink[] = [
-  { label: 'Inicio', href: `${base}` },
-  { label: 'Blog', href: `${base}/blog/` },
+  { label: 'Inicio', href: withBase() },
+  { label: 'Blog', href: withBase('blog/') },
 ];
 
 const isScrolled = ref(false);
@@ -15,6 +18,21 @@ const isMobileOpen = ref(false);
 
 function handleScroll() {
   isScrolled.value = window.scrollY > 20;
+}
+
+function linkClass(href: string, extra = ''): string {
+  const current = isCurrentSection(props.currentPath, href);
+  return cn(
+    'font-body text-sm transition-colors',
+    extra,
+    current
+      ? 'font-semibold underline underline-offset-4 decoration-2 text-text-primary'
+      : 'text-text-secondary hover:text-text-primary',
+  );
+}
+
+function currentPage(href: string): 'page' | undefined {
+  return isCurrentSection(props.currentPath, href) ? 'page' : undefined;
 }
 
 onMounted(() => window.addEventListener('scroll', handleScroll));
@@ -30,17 +48,18 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
   >
     <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
       <!-- Logo -->
-      <a :href="base" class="font-space font-bold text-xl text-primary-light hover:text-primary transition-colors">
+      <a :href="withBase()" class="font-space font-bold text-xl text-primary-light hover:text-primary transition-colors">
         FísicaFans
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-8">
+      <nav class="hidden md:flex items-center gap-8" aria-label="Principal">
         <a
           v-for="link in navLinks"
           :key="link.href"
           :href="link.href"
-          class="font-body text-text-secondary hover:text-text-primary transition-colors text-sm"
+          :class="linkClass(link.href)"
+          :aria-current="currentPage(link.href)"
         >
           {{ link.label }}
         </a>
@@ -67,7 +86,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
         v-for="link in navLinks"
         :key="link.href"
         :href="link.href"
-        class="block py-2 font-body text-text-secondary hover:text-text-primary transition-colors"
+        :class="linkClass(link.href, 'block py-2')"
+        :aria-current="currentPage(link.href)"
         @click="isMobileOpen = false"
       >
         {{ link.label }}

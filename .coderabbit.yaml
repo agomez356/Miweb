@@ -1,0 +1,53 @@
+# CodeRabbit revisa los pull requests de FísicaFans.
+# La guía del repositorio es AGENTS.md. Este archivo solo afina la revisión.
+language: es-ES
+tone_instructions: >
+  Escribe en español, directo y breve. Señala fallos reales.
+  No pidas npm, modo claro, Docker, Chart.js, MathJax, SSR ni Netlify.
+
+reviews:
+  profile: chill
+  poem: false
+  high_level_summary: true
+  auto_approvals:
+    enabled: false
+  finishing_touches:
+    docstrings:
+      enabled: false
+  auto_review:
+    enabled: true
+    drafts: true
+    base_branches:
+      - "^main$"
+  path_filters:
+    - "!old_version/**"
+    - "!dist/**"
+    - "!Imagenes/**"
+  path_instructions:
+    - path: "src/**"
+      instructions: |
+        Sigue AGENTS.md. Sitio estático de Astro 4, Vue 3 y Tailwind 3.
+        Todo enlace interno usa el prefijo /Miweb (import.meta.env.BASE_URL en Vue).
+        TypeScript estricto, sin any. Clases condicionales con cn().
+        Valores dinámicos en style, no en clases de Tailwind. Sin @apply.
+        Modo oscuro único. Usa los tokens de tailwind.config.cjs.
+    - path: "src/content/blog/**"
+      instructions: |
+        Texto del lector en español. Frontmatter válido: category del enum,
+        pubDate, draft. Matemáticas solo con KaTeX ($...$ y $$...$$).
+        Un post con draft true no debe publicarse. No inventes resultados físicos.
+    - path: ".github/workflows/**"
+      instructions: |
+        Node 20 y pnpm 10, con pnpm install --frozen-lockfile.
+        ci.yml solo construye. deploy.yml publica en GitHub Pages al llegar a main.
+        No añadas Netlify, Vercel ni npm.
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - files: "AGENTS.md"
+        applyTo: "**/*"
+
+chat:
+  auto_reply: true

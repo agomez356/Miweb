@@ -63,9 +63,10 @@ const categories: Category[] = [
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <a
           v-for="cat in categories"
+          :id="cat.id"
           :key="cat.id"
           href="#"
-          class="glass rounded-celestial-lg p-8 group transition-all duration-300 hover:-translate-y-1"
+          class="glass rounded-celestial-lg p-8 group scroll-mt-24 transition-all duration-300 hover:-translate-y-1"
           :style="{ '--cat-color': cat.color }"
         >
           <div class="text-4xl mb-4">{{ cat.icon }}</div>

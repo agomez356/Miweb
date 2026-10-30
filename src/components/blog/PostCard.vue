@@ -42,7 +42,7 @@ const categoryLabels: Record<PhysicsCategory, string> = {
 </script>
 
 <template>
-  <article class="glass rounded-celestial-lg p-6 group hover:-translate-y-1 transition-all duration-300">
+  <article class="glass relative rounded-celestial-lg p-6 group hover:-translate-y-1 transition-all duration-300">
     <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4">
       <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
         <span
@@ -61,24 +61,24 @@ const categoryLabels: Record<PhysicsCategory, string> = {
       <span class="font-body text-xs text-text-muted">{{ formatReadingTime(readingMinutes) }}</span>
     </div>
 
-    <a :href="`${base}/blog/${slug}/`">
-      <h3 class="font-space font-semibold text-lg text-text-primary mb-2 group-hover:text-primary-light transition-colors">
+    <h3 class="font-space font-semibold text-lg text-text-primary mb-2 group-hover:text-primary-light transition-colors">
+      <a
+        :href="`${base}/blog/${slug}/`"
+        class="after:absolute after:inset-0 after:z-10 after:content-[''] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary rounded-sm"
+      >
         {{ title }}
-      </h3>
-    </a>
+      </a>
+    </h3>
 
     <p class="font-body text-text-secondary text-sm leading-relaxed line-clamp-2 mb-4">
       {{ description }}
     </p>
 
-    <a
-      :href="`${base}/blog/${slug}/`"
-      class="font-space text-sm text-primary hover:text-primary-light transition-colors inline-flex items-center gap-1"
-    >
+    <span class="font-space text-sm text-primary group-hover:text-primary-light transition-colors inline-flex items-center gap-1">
       Leer más
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
-    </a>
+    </span>
   </article>
 </template>
