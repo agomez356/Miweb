@@ -1,6 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+import type { NextStep } from '../../layouts/BlogPostLayout.astro';
+import { getCategory } from '../../utils/categories';
+import { formatDate, isoDate } from '../../utils/formatDate';
+import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -12,8 +16,39 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content, headings } = await entry.render();
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf(),
+);
+
+const sameCategory = posts
+  .filter((post) => post.slug !== entry.slug && post.data.category === entry.data.category)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+function toStep(post: (typeof posts)[number], label: string): NextStep {
+  return {
+    label,
+    title: post.data.title,
+    href: withBase(`blog/${post.slug}/`),
+    dateLabel: formatDate(post.data.pubDate),
+    datetime: isoDate(post.data.pubDate),
+  };
+}
+
+let nextSteps: NextStep[];
+if (sameCategory.length > 0) {
+  nextSteps = sameCategory.map((post) => toStep(post, getCategory(post.data.category).label));
+} else {
+  const index = posts.findIndex((post) => post.slug === entry.slug);
+  const previous = index > 0 ? posts[index - 1] : undefined;
+  const following = index >= 0 && index < posts.length - 1 ? posts[index + 1] : undefined;
+  nextSteps = [];
+  if (previous) nextSteps.push(toStep(previous, 'Anterior'));
+  if (following) nextSteps.push(toStep(following, 'Siguiente'));
+}
 ---
 
-<BlogPostLayout entry={entry} headings={headings}>
+<BlogPostLayout entry={entry} headings={headings} nextSteps={nextSteps}>
   <Content />
 </BlogPostLayout>

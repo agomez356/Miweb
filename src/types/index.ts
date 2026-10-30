@@ -20,6 +20,10 @@ export interface PostFrontmatter {
   pubDate: Date;
   draft: boolean;
   heroImage?: string;
+  heroAlt?: string;
+  heroCaption?: string;
+  heroWidth?: number;
+  heroHeight?: number;
 }
 
 // ─── Navigation ────────────────────────────────────────────────────────────

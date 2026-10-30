@@ -1,64 +1,172 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/blog/Breadcrumbs.astro';
 import TableOfContents from '../components/blog/TableOfContents.vue';
 import ReadingProgress from '../components/blog/ReadingProgress.vue';
-import { formatDate } from '../utils/formatDate';
-import type { CollectionEntry } from 'astro:content';
+import { categoryHref, getCategory } from '../utils/categories';
+import { formatDate, isoDate } from '../utils/formatDate';
+import { withBase } from '../utils/url';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+export interface NextStep {
+  label: string;
+  title: string;
+  href: string;
+  dateLabel: string;
+  datetime: string;
+}
 
 interface Props {
   entry: CollectionEntry<'blog'>;
-  headings: { depth: number; slug: string; text: string }[];
+  headings: Heading[];
+  nextSteps: NextStep[];
 }
 
-const { entry, headings } = Astro.props;
-const { title, description, category, pubDate } = entry.data;
+const { entry, headings, nextSteps } = Astro.props;
+const { title, description, category, pubDate, heroImage, heroAlt, heroCaption, heroWidth, heroHeight } =
+  entry.data;
+const categoryInfo = getCategory(category);
 
-const categoryLabels: Record<string, string> = {
-  'termodinamica': 'Termodinámica',
-  'mecanica-cuantica': 'Mecánica Cuántica',
-  'fisica-clasica': 'Física Clásica',
-  'electromagnetismo': 'Electromagnetismo',
-  'relatividad': 'Relatividad',
-};
+if (heroImage && (!heroAlt || !heroWidth || !heroHeight)) {
+  throw new Error(`«${title}» declara heroImage sin texto alternativo o dimensiones.`);
+}
+
+const imageSrc = heroImage ? withBase(heroImage) : undefined;
+const ogImage = imageSrc ? new URL(imageSrc, Astro.site).toString() : undefined;
+const visibleHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} ogImage={ogImage}>
   <ReadingProgress client:load />
 
   <div class="max-w-6xl mx-auto px-4 pt-32 pb-24">
     <div class="lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
-      <!-- Article content -->
       <article>
-        <!-- Header -->
-        <header class="mb-12">
-          <p class="font-space text-tertiary text-sm uppercase tracking-widest mb-4">
-            {categoryLabels[category]}
-          </p>
+        <header class="mb-10">
+          <Breadcrumbs
+            items={[
+              { label: 'Inicio', href: withBase() },
+              { label: 'Blog', href: withBase('blog/') },
+              { label: categoryInfo.title, href: categoryHref(category) },
+              { label: title },
+            ]}
+          />
+          <a
+            href={categoryHref(category)}
+            class="mb-4 inline-flex min-h-11 items-center font-space text-sm uppercase tracking-widest text-tertiary transition-colors hover:text-primary-light focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            {categoryInfo.label}
+          </a>
           <h1 class="font-space font-bold text-4xl md:text-5xl text-text-primary leading-tight mb-4">
             {title}
           </h1>
           <p class="font-body text-text-secondary text-lg mb-6">{description}</p>
-          <time class="font-body text-text-muted text-sm">
+          <time class="font-body text-text-muted text-sm" datetime={isoDate(pubDate)}>
             {formatDate(pubDate)}
           </time>
         </header>
 
-        <!-- MDX content -->
-        <div class="prose prose-invert prose-lg max-w-none
-          prose-headings:font-space prose-headings:font-semibold prose-headings:text-text-primary
+        {
+          visibleHeadings.length > 0 && (
+            <details class="mb-10 rounded-celestial border border-primary/20 bg-surface px-4 py-3 lg:hidden">
+              <summary class="flex min-h-11 cursor-pointer items-center font-space text-sm uppercase tracking-widest text-text-primary marker:text-primary-light">
+                Contenido
+              </summary>
+              <nav aria-label="Contenido del artículo">
+                <ol class="mt-2 space-y-1">
+                  {visibleHeadings.map((heading) => (
+                    <li style={{ paddingLeft: `${Math.max(0, heading.depth - 2) * 12}px` }}>
+                      <a
+                        href={`#${heading.slug}`}
+                        class="inline-flex min-h-11 items-center font-body text-sm text-text-secondary transition-colors hover:text-primary-light focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                      >
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </details>
+          )
+        }
+
+        {
+          imageSrc && heroAlt && heroWidth && heroHeight && (
+            <figure class="mb-10">
+              <img
+                src={imageSrc}
+                alt={heroAlt}
+                width={heroWidth}
+                height={heroHeight}
+                loading="lazy"
+                decoding="async"
+                class="mx-auto h-auto max-w-full rounded-celestial-lg"
+              />
+              {heroCaption && (
+                <figcaption class="mx-auto mt-3 max-w-prose text-center font-body text-sm text-text-muted">
+                  {heroCaption}
+                </figcaption>
+              )}
+            </figure>
+          )
+        }
+
+        <div
+          class="prose prose-invert prose-lg max-w-none
+          prose-headings:scroll-mt-28 prose-headings:font-space prose-headings:font-semibold prose-headings:text-text-primary
           prose-p:font-body prose-p:text-text-secondary prose-p:leading-relaxed
           prose-a:text-primary prose-a:no-underline hover:prose-a:text-primary-light
           prose-code:text-primary-light prose-code:bg-surface prose-code:px-1 prose-code:rounded
           prose-pre:bg-surface prose-pre:border prose-pre:border-primary/15
           prose-strong:text-text-primary
-          prose-blockquote:border-primary/40 prose-blockquote:text-text-secondary">
+          prose-blockquote:border-primary/40 prose-blockquote:text-text-secondary"
+        >
           <slot />
         </div>
+
+        <section class="mt-16" aria-label="Siguientes pasos">
+          {
+            nextSteps.length > 0 && (
+              <>
+                <h2 class="mb-6 font-space text-2xl font-semibold text-text-primary">Sigue leyendo</h2>
+                <ul class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {nextSteps.map((step) => (
+                    <li>
+                      <a
+                        href={step.href}
+                        class="glass group block h-full rounded-celestial-lg p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                      >
+                        <p class="mb-2 font-space text-xs uppercase tracking-widest text-tertiary">{step.label}</p>
+                        <p class="font-space text-lg font-semibold text-text-primary transition-colors group-hover:text-primary-light">
+                          {step.title}
+                        </p>
+                        <time class="mt-2 block font-body text-sm text-text-muted" datetime={step.datetime}>
+                          {step.dateLabel}
+                        </time>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
+          <a
+            href={withBase('blog/')}
+            class="inline-flex min-h-11 items-center font-space text-primary transition-colors hover:text-primary-light focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            Volver al blog
+          </a>
+        </section>
       </article>
 
-      <!-- Sticky ToC -->
       <aside>
-        <TableOfContents client:load headings={headings} />
+        <TableOfContents client:media="(min-width: 1024px)" headings={headings} />
       </aside>
     </div>
   </div>

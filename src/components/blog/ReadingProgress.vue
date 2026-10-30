@@ -15,7 +15,7 @@ onUnmounted(() => window.removeEventListener('scroll', updateProgress));
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-surface">
+  <div class="fixed top-0 left-0 right-0 z-[60] h-0.5 bg-surface" aria-hidden="true">
     <div
       class="h-full bg-gradient-to-r from-primary to-secondary transition-none"
       :style="{ width: `${progress}%` }"
