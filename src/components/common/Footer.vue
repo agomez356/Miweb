@@ -7,6 +7,7 @@ const props = defineProps<{
 }>();
 
 const year = new Date().getFullYear();
+const acercaHref = withBase('/acerca/');
 
 const sections = [
   { label: 'Inicio', href: withBase() },
@@ -35,7 +36,13 @@ function sectionClass(href: string): string {
 <template>
   <footer class="glass mt-24 py-12">
     <div class="max-w-6xl mx-auto px-4 text-center">
-      <p class="font-space font-bold text-lg text-primary-light mb-6">FísicaFans</p>
+      <p class="font-space font-bold text-lg text-primary-light mb-2">FísicaFans</p>
+      <a
+        :href="acercaHref"
+        class="inline-flex items-center justify-center min-h-11 mb-2 font-body text-sm text-text-secondary hover:text-primary-light transition-colors"
+      >
+        Acerca de
+      </a>
 
       <nav aria-label="Secciones del sitio" class="mb-8 flex flex-col items-center gap-4">
         <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
