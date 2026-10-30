@@ -1,0 +1,40 @@
+---
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Migas de pan" class="mb-6">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-sm">
+    {
+      items.map((item, index) => (
+        <li class="flex min-w-0 items-center gap-2">
+          {index > 0 && (
+            <span aria-hidden="true" class="text-text-muted">
+              /
+            </span>
+          )}
+          {item.href ? (
+            <a
+              href={item.href}
+              class="text-text-secondary transition-colors hover:text-primary-light focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            >
+              {item.label}
+            </a>
+          ) : (
+            <span class="max-w-[12rem] truncate text-text-primary sm:max-w-xs md:max-w-md" aria-current="page">
+              {item.label}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

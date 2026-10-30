@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { formatDate } from '@/utils/formatDate';
+import { computed } from 'vue';
+import { formatDate, isoDate } from '@/utils/formatDate';
+import { getCategory } from '@/utils/categories';
+import { withBase } from '@/utils/url';
 import type { PhysicsCategory } from '@/types/index';
 
 interface Props {
@@ -10,31 +13,9 @@ interface Props {
   slug: string;
 }
 
-defineProps<Props>();
-const base = import.meta.env.BASE_URL;
-
-function isoDate(date: Date): string {
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-const categoryColors: Record<PhysicsCategory, string> = {
-  'termodinamica': '#ec4899',
-  'mecanica-cuantica': '#667eea',
-  'fisica-clasica': '#fbbf24',
-  'electromagnetismo': '#10b981',
-  'relatividad': '#b9c3ff',
-};
-
-const categoryLabels: Record<PhysicsCategory, string> = {
-  'termodinamica': 'Termodinámica',
-  'mecanica-cuantica': 'Mecánica Cuántica',
-  'fisica-clasica': 'Física Clásica',
-  'electromagnetismo': 'Electromagnetismo',
-  'relatividad': 'Relatividad',
-};
+const props = defineProps<Props>();
+const categoryInfo = computed(() => getCategory(props.category));
+const postHref = computed(() => withBase(`blog/${props.slug}/`));
 </script>
 
 <template>
@@ -43,19 +24,19 @@ const categoryLabels: Record<PhysicsCategory, string> = {
       <span
         class="font-space text-xs px-3 py-1 rounded-full"
         :style="{
-          backgroundColor: `${categoryColors[category]}20`,
-          color: categoryColors[category],
-          border: `1px solid ${categoryColors[category]}40`,
+          backgroundColor: `${categoryInfo.color}20`,
+          color: categoryInfo.color,
+          border: `1px solid ${categoryInfo.color}40`,
         }"
       >
-        {{ categoryLabels[category] }}
+        {{ categoryInfo.label }}
       </span>
       <time class="font-body text-xs text-text-muted" :datetime="isoDate(pubDate)">{{ formatDate(pubDate) }}</time>
     </div>
 
     <h3 class="font-space font-semibold text-lg text-text-primary mb-2 group-hover:text-primary-light transition-colors">
       <a
-        :href="`${base}/blog/${slug}/`"
+        :href="postHref"
         class="after:absolute after:inset-0 after:z-10 after:content-[''] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary rounded-sm"
       >
         {{ title }}
